@@ -7,6 +7,6 @@ public class SizeSystem {
             {
                     "2x2",
                     "3x3",
-                    "4x4"
+                    "4x4",
             };
 }

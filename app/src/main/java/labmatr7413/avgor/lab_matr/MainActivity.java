@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         spinnerSizeSystem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                DrawSystem drawSystem = new DrawSystem(context, systemLinearLayout , position+2 );
+
                drawSystem.draw();
             }
 

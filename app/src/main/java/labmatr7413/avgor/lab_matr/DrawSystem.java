@@ -28,6 +28,8 @@ public  class DrawSystem {
     }
 
      void draw(){
+
+
         for (int j=0; j< size; j++){
             LinearLayout linearLayout = new LinearLayout(context);
             for (int i = 0; i< size; i++){
