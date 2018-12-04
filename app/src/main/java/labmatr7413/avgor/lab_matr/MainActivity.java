@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinnerSizeSystem;
     LinearLayout systemLinearLayout;
     Context context;
+    int size_horizontal;
+    int size_vertical;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                DrawSystem drawSystem = new DrawSystem(context, systemLinearLayout , position+2 );
+               size_horizontal = position+3;
+               size_vertical = position+2;
                drawSystem.draw();
             }
 
