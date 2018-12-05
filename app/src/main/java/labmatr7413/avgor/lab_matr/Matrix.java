@@ -16,6 +16,12 @@ public class Matrix extends MainActivity implements Comparable<Matrix> {
 
     }
 
+
+    public double getDet(Matrix mt1){
+        double det = MaxtrixCalculator.gauss(mt1);
+        return det;
+    }
+
     //Getting size of matrix, type of this method is MatrixSize
     public MatrixSize getSize(){
         int rows = matrix.length;
@@ -33,11 +39,6 @@ public class Matrix extends MainActivity implements Comparable<Matrix> {
         return matrix[rowNum][colNum];
     }
 
-    public static Matrix createMatrix(int rows, int columns){
-        Matrix mt = new Matrix();
-        mt.setSize(rows, columns);
-        return mt;
-    }
 
 
 

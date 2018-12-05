@@ -95,6 +95,13 @@
                     android:textColor="@color/colorPrimary"
                     />
 
+                <TextView
+                    android:id="@+id/res"
+                    android:layout_width="0dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    android:text="TextView" />
+
 
             </LinearLayout>
 

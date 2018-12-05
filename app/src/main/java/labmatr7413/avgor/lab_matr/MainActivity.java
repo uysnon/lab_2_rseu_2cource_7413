@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     int size_horizontal;
     int size_vertical;
     DrawSystem drawSystem;
-
+    TextView tv;
     System system;
     Button buttonGauss;
 
@@ -46,6 +47,24 @@ public class MainActivity extends AppCompatActivity {
                     try {
                     system = new System(drawSystem.getIdEditTexts().length, drawSystem.getIdEditTexts()[0].length);
                     parseEditTexts(drawSystem);
+                    tv = findViewById(R.id.res);
+                    int rows  = size_horizontal;
+                     Matrix mat1 = new Matrix();
+                     double matRes;
+                     double value;
+                     mat1.setSize(rows, rows);
+
+                        for (int i=0; i<rows; i++){
+                            for (int j=0; j<rows; j++){
+                                value = system.getSystemCoefficients()[i][j];
+                                mat1.setElem(i+1, j+1,value);
+                            }
+                        }
+
+                        //matRes = MaxtrixCalculator.gauss(mat1);
+                        matRes = mat1.getDet(mat1);
+                        tv.setText(Double.toString(matRes));
+
                 }catch (Exception e){
                         ToastMessages.dataError(context);
                     }

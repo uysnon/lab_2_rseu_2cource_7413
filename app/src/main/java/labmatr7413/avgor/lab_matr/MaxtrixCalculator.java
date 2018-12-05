@@ -8,15 +8,7 @@ public class MaxtrixCalculator {
     }
 
 
-    public static Matrix createMatrix(int rows, int columns, double[][] data){
-        Matrix mt = Matrix.createMatrix(rows, columns);
-        for(int i=0; i<data.length; i++){
-            for(int j=0; j<data[i].length; j++){
-                mt.setElem(i, j, data[i][j]);
-            }
-        }
-        return mt;
-    }
+
 
     public static Matrix swapLine(int swapLine, int targetLine, Matrix mt1) {
         int rows = mt1.getSize().getRows();
