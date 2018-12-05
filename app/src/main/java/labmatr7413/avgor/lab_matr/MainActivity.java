@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinnerSizeSystem;
     LinearLayout systemLinearLayout;
     Context context;
+    int size_horizontal;
+    int size_vertical;
+    DrawSystem drawSystem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         context =  getApplication().getApplicationContext();
         systemLinearLayout =  findViewById(R.id.linear_layout_system_picture);
         spinnerSizeSystem = findViewById(R.id.spinner_size_system);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SizeSystem.SIZES_ARRAY_STRING);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, SizeSystem.SIZES_ARRAY_STRING);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSizeSystem.setAdapter(adapter);
 
@@ -31,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-               DrawSystem drawSystem = new DrawSystem(context, systemLinearLayout , position+2 );
+               drawSystem = new DrawSystem(context, systemLinearLayout , position+2 );
 
+               size_horizontal = position+3;
+               size_vertical = position+2;
                drawSystem.draw();
             }
 

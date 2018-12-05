@@ -2,8 +2,9 @@ package labmatr7413.avgor.lab_matr;
 
 
 
-public class Matrix implements Comparable<Matrix>{
+public class Matrix extends MainActivity implements Comparable<Matrix> {
     private double[][] matrix;
+
 
     //Default constructor
     Matrix(){
@@ -11,7 +12,8 @@ public class Matrix implements Comparable<Matrix>{
 
     //Setting size of matrix
     public void setSize(int rows, int columns){
-        matrix = new double[rows][columns];
+        this.matrix = new double[rows][columns];
+
     }
 
     //Getting size of matrix, type of this method is MatrixSize
