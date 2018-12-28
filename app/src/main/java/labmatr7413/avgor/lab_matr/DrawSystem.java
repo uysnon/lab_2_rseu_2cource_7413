@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.Random;
 
 import java.lang.reflect.Array;
 
@@ -19,7 +20,7 @@ public  class DrawSystem {
      int size;
      LinearLayout parentLinearLayout;
 
-    DrawSystem(Context context, LinearLayout parentLinearLayout, int size){
+     DrawSystem(Context context, LinearLayout parentLinearLayout, int size){
         this.parentLinearLayout = parentLinearLayout;
         if (size == 1){
             parentLinearLayout.removeAllViews();
@@ -41,13 +42,14 @@ public  class DrawSystem {
     }
 
      void draw(){
+         Random random= new Random();
         parentLinearLayout.removeAllViews();
         for (int j=0; j< idEditTexts.length; j++){
             LinearLayout linearLayout = new LinearLayout(context);
             for (int i = 0; i< idEditTexts[0].length; i++){
                 EditText editText = new EditText(context);
                 editText.setId(idEditTexts[j][i]);
-                editText.setText("0");
+                editText.setText(Integer.toString(random.nextInt(20)));
                 editText.setWidth(WIDTH_EDIT_TEXT);
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.setKeyListener(DigitsKeyListener.getInstance("0123456789.-"));
@@ -68,6 +70,7 @@ public  class DrawSystem {
         }
 
     }
+
 
     public int[][] getIdEditTexts() {
         return idEditTexts;

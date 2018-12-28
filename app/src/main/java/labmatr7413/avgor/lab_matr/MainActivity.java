@@ -16,12 +16,14 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinnerSizeSystem;
     LinearLayout systemLinearLayout;
+    LinearLayout matrixGaussLinearLayout;
     Context context;
     int size_horizontal;
     int size_vertical;
     DrawSystem drawSystem;
     System system;
     Button buttonGauss;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SizeSystem.SIZES_ARRAY_STRING);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         buttonGauss = findViewById(R.id.button_method_Gauss);
+        matrixGaussLinearLayout = findViewById(R.id.matrix_Gauss);
         spinnerSizeSystem.setAdapter(adapter);
         spinnerSizeSystem.setSelection(0);
 
@@ -41,12 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
 
                 public void onClick(View v) {
-                    try {
+//                    try {
                     system = new System(drawSystem.getIdEditTexts().length, drawSystem.getIdEditTexts()[0].length);
                     parseEditTexts(drawSystem);
-                }catch (Exception e){
-                        ToastMessages.dataError(context);
-                    }
+                    MethodGauss methodGauss = new MethodGauss(system.systemCoefficients);
+                    methodGauss.Gauss();
+                    DrawMatrix drawMatrixGauss = new DrawMatrix(context, matrixGaussLinearLayout, methodGauss.resultMatrix);
+                    drawMatrixGauss.setAnswers(methodGauss.x);
+                    drawMatrixGauss.draw();
+//                }catch (Exception e){
+//                        ToastMessages.dataError(context);
+//                    }
                 }
 
             });
