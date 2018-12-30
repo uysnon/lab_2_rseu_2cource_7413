@@ -22,24 +22,31 @@ import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 
 public class DrawMatrix {
-    static  private final int WIDTH_TEXT_VIEW = 105;
+    static private final int WIDTH_TEXT_VIEW = 65;
     Context context;
     double[][] matrix;
     LinearLayout parentLinearLayout;
     LinearLayout matrixItself;
     LinearLayout left;
     LinearLayout right;
+    LinearLayout matrixTextHead;
+    LinearLayout matrixTextAnswers;
     double[] answers;
 
 
-    DrawMatrix(Context context, LinearLayout parentLinearLayout, LinearLayout matrixItself,LinearLayout LEFT, LinearLayout RIGHT, double[][] matrix){
+    DrawMatrix(Context context, LinearLayout matrixTextHead, LinearLayout parentLinearLayout, LinearLayout matrixItself,LinearLayout LEFT, LinearLayout RIGHT,LinearLayout  matrixTextAnswers, double[][] matrix){
         this.parentLinearLayout = parentLinearLayout;
         this.matrixItself = matrixItself;
         this.left = LEFT;
         this.right = RIGHT;
         this.context = context;
+        this.matrixTextHead = matrixTextHead;
+        this.matrixTextAnswers = matrixTextAnswers;
         this.matrix = setArray(matrix);
         answers = new double[matrix.length];
     }
@@ -52,9 +59,11 @@ public class DrawMatrix {
     @SuppressLint("ResourceAsColor")
     void draw(){
         parentLinearLayout.removeAllViews();
+        matrixItself.removeAllViews();
         left.removeAllViews();
         right.removeAllViews();
-        matrixItself.removeAllViews();
+        matrixTextHead.removeAllViews();
+
         LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         headParams.setMargins(0,50,0,25);
         headParams.gravity = Gravity.CENTER;
@@ -63,27 +72,56 @@ public class DrawMatrix {
         HeadText.setTextSize(18);
         HeadText.setTextColor(Color.parseColor("#000000"));
         HeadText.setLayoutParams(headParams);
+        matrixTextHead.addView(HeadText);
 
-
-        parentLinearLayout.addView(HeadText);
         ImageView im = new ImageView(context);
-        im.setImageResource(R.drawable.ic_gullbraceleft);
+        im.setImageResource(R.drawable.bracket_left);
+        ImageView imR = new ImageView(context);
+        imR.setImageResource(R.drawable.ic_right_bracket);
         LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams imgParamsR = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         switch(matrix.length) {
             case 2:
-
-            case 3:
-                imgParams.height = 115;
-                imgParams.setMargins(0,0,350,0);
+                imgParams.height = 130;
+                imgParams.width = 45;
                 im.setLayoutParams(imgParams);
 
-                left.addView(im);
+
+
+                imgParamsR.height = 130;
+                imgParamsR.width = 45;
+                imR.setLayoutParams(imgParamsR);
+                break;
+
+            case 3:
+                imgParams.height = 175;
+                imgParams.width = 65;
+                im.setLayoutParams(imgParams);
+                imgParamsR.height = 175;
+                imgParamsR.width = 65;
+                imR.setLayoutParams(imgParamsR);
+                break;
+
 
             case 4:
-        }
+                imgParams.height = 275;
+                imgParams.width = 65;
+                im.setLayoutParams(imgParams);
+                imgParamsR.height = 275;
+                imgParamsR.width = 65;
+                imR.setLayoutParams(imgParamsR);
+                break;
 
+
+        }
+        left.addView(im);
+        right.addView(imR);
 
         parentLinearLayout.addView(left);
+
+
+
+
 
         for (int j=0; j< matrix.length; j++){
             LinearLayout linearLayout = new LinearLayout(context);
@@ -98,22 +136,32 @@ public class DrawMatrix {
                 textView.setTextSize(15);
                 textView.setTextColor(Color.parseColor("#000000"));
                 textView.setText(Double.toString(matrix[j][i]));
-                textView.setWidth(WIDTH_TEXT_VIEW);
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                TextView textViewSign = new TextView(context);
+                textView.setWidth(125);
                 linearLayout.addView(textView);
+
 
             }
             matrixItself.addView(linearLayout);
-            //надо перент вью докинуть
+
+
+
         }
 
+        parentLinearLayout.addView(matrixItself);
+
+        parentLinearLayout.addView(right);
         drawAnswers();
+
+
+
+
+
+
+
 
     }
     void drawAnswers(){
-        int maxLength = 9;
-
+        matrixTextAnswers.removeAllViews();
         TextView headAnswers = new TextView(context);
         headAnswers.setText("Решение СЛАУ: ");
         headAnswers.setTextSize(18);
@@ -124,17 +172,18 @@ public class DrawMatrix {
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,30,0,0);
-        parentLinearLayout.addView(headAnswers);
+        matrixTextAnswers.addView(headAnswers);
         linearLayoutAnswers.setLayoutParams(params);
         headAnswers.setLayoutParams(params);
         for (int j=0; j< this.answers.length; j++){
+            BigDecimal bigDecimal = new BigDecimal(this.answers[j]).setScale(2,RoundingMode.HALF_UP);
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 TextView textView = new TextView(context);
                 textView.setTextSize(17);
                 textView.setTextColor(Color.parseColor("#541137"));
-                String s = (("x" +Integer.toString(j+1)+" = "+ this.answers[j]).substring(0,maxLength)) + ";" + " ";
-                //textView.setFilters(fArray);
+                String s = "x" + Integer.toString(j+1)+" = "+ bigDecimal.toString() + ";" + " ";
+
                 textView.setText(s);
 
 
@@ -144,7 +193,7 @@ public class DrawMatrix {
                 linearLayout.addView(textView);
                 linearLayoutAnswers.addView(linearLayout);
             }
-        parentLinearLayout.addView(linearLayoutAnswers);
+        matrixTextAnswers.addView(linearLayoutAnswers);
         }
 
     public void setAnswers(double[] answers) {

@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout matrixLeftBracket;
     LinearLayout matrixRightBracket;
     LinearLayout matrixLayout;
+    LinearLayout matrixTextHead;
+    LinearLayout matrixTextAnswers;
     Context context;
 
     DrawSystem drawSystem;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         matrixLeftBracket = findViewById(R.id.matrix_left_bracket);
         matrixRightBracket  = findViewById(R.id.matrix_right_bracket);
         matrixLayout = findViewById(R.id.Matrix);
+        matrixTextHead = findViewById(R.id.headText);
+        matrixTextAnswers = findViewById(R.id.answer_Gauss);
         spinnerSizeSystem.setAdapter(adapter);
         spinnerSizeSystem.setSelection(0);
 
@@ -50,17 +54,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
 
                 public void onClick(View v) {
-//                    try {
+                try {
                     system = new System(drawSystem.getIdEditTexts().length, drawSystem.getIdEditTexts()[0].length);
                     parseEditTexts(drawSystem);
                     MethodGauss methodGauss = new MethodGauss(system.systemCoefficients);
                     methodGauss.Gauss();
-                    DrawMatrix drawMatrixGauss = new DrawMatrix(context, matrixGaussLinearLayout,matrixLayout, matrixLeftBracket,matrixRightBracket, methodGauss.resultMatrix);
+                    DrawMatrix drawMatrixGauss = new DrawMatrix(context, matrixTextHead, matrixGaussLinearLayout, matrixLayout,matrixLeftBracket,matrixRightBracket, matrixTextAnswers,methodGauss.resultMatrix);
                     drawMatrixGauss.setAnswers(methodGauss.x);
                     drawMatrixGauss.draw();
-//                }catch (Exception e){
-//                        ToastMessages.dataError(context);
-//                    }
+               }catch (Exception e){
+                      ToastMessages.dataError(context);
+                    }
                 }
 
             });
