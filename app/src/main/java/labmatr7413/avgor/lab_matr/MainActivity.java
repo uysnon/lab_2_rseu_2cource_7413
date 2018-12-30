@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,9 +18,11 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinnerSizeSystem;
     LinearLayout systemLinearLayout;
     LinearLayout matrixGaussLinearLayout;
+    LinearLayout matrixLeftBracket;
+    LinearLayout matrixRightBracket;
+    LinearLayout matrixLayout;
     Context context;
-    int size_horizontal;
-    int size_vertical;
+
     DrawSystem drawSystem;
     System system;
     Button buttonGauss;
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         buttonGauss = findViewById(R.id.button_method_Gauss);
         matrixGaussLinearLayout = findViewById(R.id.matrix_Gauss);
+        matrixLeftBracket = findViewById(R.id.matrix_left_bracket);
+        matrixRightBracket  = findViewById(R.id.matrix_right_bracket);
+        matrixLayout = findViewById(R.id.Matrix);
         spinnerSizeSystem.setAdapter(adapter);
         spinnerSizeSystem.setSelection(0);
 
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     parseEditTexts(drawSystem);
                     MethodGauss methodGauss = new MethodGauss(system.systemCoefficients);
                     methodGauss.Gauss();
-                    DrawMatrix drawMatrixGauss = new DrawMatrix(context, matrixGaussLinearLayout, methodGauss.resultMatrix);
+                    DrawMatrix drawMatrixGauss = new DrawMatrix(context, matrixGaussLinearLayout,matrixLayout, matrixLeftBracket,matrixRightBracket, methodGauss.resultMatrix);
                     drawMatrixGauss.setAnswers(methodGauss.x);
                     drawMatrixGauss.draw();
 //                }catch (Exception e){

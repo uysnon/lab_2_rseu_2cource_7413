@@ -2,6 +2,7 @@ package labmatr7413.avgor.lab_matr;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.Gravity;
@@ -43,6 +44,7 @@ public  class DrawSystem {
 
      void draw(){
          Random random= new Random();
+
         parentLinearLayout.removeAllViews();
         for (int j=0; j< idEditTexts.length; j++){
             LinearLayout linearLayout = new LinearLayout(context);
