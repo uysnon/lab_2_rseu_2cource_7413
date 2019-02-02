@@ -13,8 +13,18 @@ public class MethodGauss {
     int width;
     int height;
     double[][] resultMatrix;
-    double[] x;
-    ArrayList<double[][]> matrixhHerarchy;
+
+    public double[] getX() {
+        return x;
+    }
+
+    private double[] x;
+
+    public ArrayList<double[][]> getMatrixhHerarchy() {
+        return matrixhHerarchy;
+    }
+
+    private ArrayList<double[][]> matrixhHerarchy;
 
     MethodGauss(double [][] sourceMatrix ){
         matrix = setArray(sourceMatrix);
@@ -22,7 +32,7 @@ public class MethodGauss {
         width = matrix0[0].length;
         height = matrix0.length;
         this.x = new double[matrix0.length];
-
+        matrixhHerarchy  = new ArrayList<>();
     }
     //    Приведение исходной матрицы к треугольному виду
     public void Gauss(){
@@ -33,6 +43,7 @@ public class MethodGauss {
         // rty|s->(1) 0ty|s->(2) 0ty|s  , итого 2 итерации (переменные приведены для
         // uio|d      0io|d      00o|d    наглядности).
         int iteration = 0 ;
+        matrixhHerarchy.add(setIteration(matrix));
         while (!isRectangle(matrix)) {
 //            int numSort = 0;
 //            while (numSort < this.matrix.length - 1) {
@@ -58,7 +69,7 @@ public class MethodGauss {
                 }
                 matrix = setLine(matrix, lineCurrent, i);
             }
-
+            matrixhHerarchy.add(setIteration(matrix));
             iteration++;
         }
         resultMatrix = new double[matrix.length][matrix[0].length];
@@ -72,6 +83,19 @@ public class MethodGauss {
         }
         getAnswers(resultMatrix);
 
+    }
+
+    private double[][] setIteration(double[][] basic){
+        double[][] result = new double[basic.length][basic[0].length];
+        for(int m = 0;m < basic.length; m++){
+            for(int n = 0;n < basic[0].length; n++){
+                Double d = new Double(basic[m][n]);
+                result[m][n] = BigDecimal.valueOf(d)
+                        .setScale(1, RoundingMode.HALF_UP)
+                        .doubleValue();
+            }
+        }
+        return result;
     }
 
 

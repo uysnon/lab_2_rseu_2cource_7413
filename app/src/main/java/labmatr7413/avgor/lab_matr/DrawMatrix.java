@@ -15,6 +15,7 @@ import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,31 +25,33 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 
 
 public class DrawMatrix {
     static private final int WIDTH_TEXT_VIEW = 65;
     Context context;
-    double[][] matrix;
+    ArrayList <double[][]>  matrixhHerarchy;
     LinearLayout parentLinearLayout;
-    LinearLayout matrixItself;
-    LinearLayout left;
-    LinearLayout right;
-    LinearLayout matrixTextHead;
     LinearLayout matrixTextAnswers;
     double[] answers;
+    int sizeSystem;
 
 
-    DrawMatrix(Context context, LinearLayout matrixTextHead, LinearLayout parentLinearLayout, LinearLayout matrixItself,LinearLayout LEFT, LinearLayout RIGHT,LinearLayout  matrixTextAnswers, double[][] matrix){
+    DrawMatrix(
+            Context context,
+            LinearLayout parentLinearLayout,
+            LinearLayout  matrixTextAnswers,
+            MethodGauss methodGauss)
+    {
         this.parentLinearLayout = parentLinearLayout;
-        this.matrixItself = matrixItself;
-        this.left = LEFT;
-        this.right = RIGHT;
+        this.parentLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        parentLinearLayout.setGravity(Gravity.CENTER);
         this.context = context;
-        this.matrixTextHead = matrixTextHead;
         this.matrixTextAnswers = matrixTextAnswers;
-        this.matrix = setArray(matrix);
-        answers = new double[matrix.length];
+        this.matrixhHerarchy = methodGauss.getMatrixhHerarchy();
+        sizeSystem = matrixhHerarchy.get(0).length;
+        answers = methodGauss.getX();
     }
 
     void clear(){
@@ -59,107 +62,111 @@ public class DrawMatrix {
     @SuppressLint("ResourceAsColor")
     void draw(){
         parentLinearLayout.removeAllViews();
-        matrixItself.removeAllViews();
-        left.removeAllViews();
-        right.removeAllViews();
-        matrixTextHead.removeAllViews();
+        for (int i = 0; i < matrixhHerarchy.size(); i++){
+            parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(i)));
+        }
+        drawAnswers();
+        parentLinearLayout.addView(getHead());
+        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size()-1)));
+    }
 
+
+    LinearLayout getHead(){
+        LinearLayout matrixTextHead = new LinearLayout(context);
         LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         headParams.setMargins(0,50,0,25);
         headParams.gravity = Gravity.CENTER;
+        matrixTextHead.setLayoutParams(headParams);
         TextView HeadText = new TextView(context);
         HeadText.setText("Расширенная треугольная матрица:");
         HeadText.setTextSize(18);
         HeadText.setTextColor(Color.parseColor("#000000"));
         HeadText.setLayoutParams(headParams);
         matrixTextHead.addView(HeadText);
+        return matrixTextHead;
+    }
 
-        ImageView im = new ImageView(context);
-        im.setImageResource(R.drawable.bracket_left);
+    LinearLayout getIterationLayout(double[][] matrix){
+        LinearLayout matrixItself = new LinearLayout(context) ;
+        matrixItself.setOrientation(LinearLayout.VERTICAL);
+
+        ViewGroup.LayoutParams helpParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ((LinearLayout.LayoutParams) helpParams).topMargin = 50;
+        ((LinearLayout.LayoutParams) helpParams).gravity  = Gravity.CENTER;
+
+        LinearLayout iterationLayout = new LinearLayout(context);
+        iterationLayout.setLayoutParams(helpParams);
+
+        LinearLayout left = new LinearLayout(context);
+        LinearLayout right = new LinearLayout(context);
+        matrixItself.removeAllViews();
+        left.removeAllViews();
+        right.removeAllViews();
+        ImageView imL = new ImageView(context);
+        imL.setImageResource(R.drawable.bracket_left);
         ImageView imR = new ImageView(context);
         imR.setImageResource(R.drawable.ic_right_bracket);
         LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams imgParamsR = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        switch(matrix.length) {
+        switch(sizeSystem) {
             case 2:
                 imgParams.height = 130;
                 imgParams.width = 45;
-                im.setLayoutParams(imgParams);
-
-
-
-                imgParamsR.height = 130;
-                imgParamsR.width = 45;
-                imR.setLayoutParams(imgParamsR);
+                imL.setLayoutParams(imgParams);
+                imR.setLayoutParams(imgParams);
                 break;
 
             case 3:
                 imgParams.height = 175;
                 imgParams.width = 65;
-                im.setLayoutParams(imgParams);
-                imgParamsR.height = 175;
-                imgParamsR.width = 65;
-                imR.setLayoutParams(imgParamsR);
+                imL.setLayoutParams(imgParams);
+                imR.setLayoutParams(imgParams);
                 break;
 
 
             case 4:
-                imgParams.height = 275;
+                imgParams.height = 250;
                 imgParams.width = 65;
-                im.setLayoutParams(imgParams);
-                imgParamsR.height = 275;
-                imgParamsR.width = 65;
-                imR.setLayoutParams(imgParamsR);
+                imL.setLayoutParams(imgParams);
+                imR.setLayoutParams(imgParams);
+                break;
+
+
+            case 5:
+                imgParams.height = 300;
+                imgParams.width = 65;
+                imL.setLayoutParams(imgParams);
+                imR.setLayoutParams(imgParams);
                 break;
 
 
         }
-        left.addView(im);
+        left.addView(imL);
         right.addView(imR);
-
-        parentLinearLayout.addView(left);
-
-
-
-
-
-        for (int j=0; j< matrix.length; j++){
-            LinearLayout linearLayout = new LinearLayout(context);
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            for (int i = 0; i< matrix[0].length; i++){
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.gravity = Gravity.CENTER;
-                linearLayout.setLayoutParams(params);
-                TextView textView = new TextView(context);
-                textView.setTextSize(15);
-                textView.setTextColor(Color.parseColor("#000000"));
-                textView.setText(Double.toString(matrix[j][i]));
-                textView.setWidth(125);
-                linearLayout.addView(textView);
-
-
+            iterationLayout.addView(left);
+            for (int j = 0; j < sizeSystem; j++) {
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                for (int i = 0; i < sizeSystem + 1; i++) {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER;
+                    linearLayout.setLayoutParams(params);
+                    TextView textView = new TextView(context);
+                    textView.setTextSize(15);
+                    textView.setTextColor(Color.parseColor("#000000"));
+                    textView.setText(Double.toString(matrix[j][i]));
+                    textView.setWidth(125);
+                    linearLayout.addView(textView);
+                }
+                matrixItself.addView(linearLayout);
             }
-            matrixItself.addView(linearLayout);
-
-
-
-        }
-
-        parentLinearLayout.addView(matrixItself);
-
-        parentLinearLayout.addView(right);
-        drawAnswers();
-
-
-
-
-
-
-
-
+            iterationLayout.addView(matrixItself);
+            iterationLayout.addView(right);
+            return  iterationLayout;
     }
+
+
+
     void drawAnswers(){
         matrixTextAnswers.removeAllViews();
         TextView headAnswers = new TextView(context);
@@ -172,6 +179,7 @@ public class DrawMatrix {
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,30,0,0);
+        linearLayoutAnswers.setOrientation(LinearLayout.VERTICAL);
         matrixTextAnswers.addView(headAnswers);
         linearLayoutAnswers.setLayoutParams(params);
         headAnswers.setLayoutParams(params);
@@ -182,21 +190,12 @@ public class DrawMatrix {
                 TextView textView = new TextView(context);
                 textView.setTextSize(17);
                 textView.setTextColor(Color.parseColor("#541137"));
-                String s = "x" + Integer.toString(j+1)+" = "+ bigDecimal.toString() + ";" + " ";
-
+                String s = "x" + Integer.toString(j+1)+" = "+ bigDecimal.toString() + ";\n" ;
                 textView.setText(s);
-
-
-//                textView.setWidth(WIDTH_TEXT_VIEW);
                 textView.setGravity(Gravity.CENTER_HORIZONTAL);
-//                TextView textViewSign = new TextView(context);
                 linearLayout.addView(textView);
                 linearLayoutAnswers.addView(linearLayout);
             }
         matrixTextAnswers.addView(linearLayoutAnswers);
         }
-
-    public void setAnswers(double[] answers) {
-        this.answers = answers;
-    }
 }

@@ -97,16 +97,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id = "@+id/headText"
-                android:gravity="center_horizontal">
-
-
-            </LinearLayout>
-
 
 
             <LinearLayout
@@ -118,53 +108,7 @@
             <!--android:background="#FF8C00"-->
 
 
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/matrix_left_bracket"
-                android:orientation="horizontal" >
-                <!--android:background="#D81B60"-->
-
-
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/Matrix"
-                android:orientation="vertical">
-                <!--android:background="#541137"-->
-
-
-
-
-            </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/matrix_right_bracket"
-                android:orientation="horizontal">
-                <!--android:background="#00574B"-->
-
-
-            </LinearLayout>
-
-
-
-
-
-
-
-
         </LinearLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -176,8 +120,6 @@
 
 
             </LinearLayout>
-
-
 
     </LinearLayout>
 
