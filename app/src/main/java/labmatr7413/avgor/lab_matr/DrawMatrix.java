@@ -10,18 +10,25 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.DigitsKeyListener;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,10 +38,10 @@ import java.util.ArrayList;
 public class DrawMatrix {
     static private final int WIDTH_TEXT_VIEW = 65;
     Context context;
-    ArrayList <double[][]>  matrixhHerarchy;
+    ArrayList <Fraction[][]>  matrixhHerarchy;
     LinearLayout parentLinearLayout;
     LinearLayout matrixTextAnswers;
-    double[] answers;
+    Fraction[] answers;
     int sizeSystem;
 
 
@@ -62,6 +69,13 @@ public class DrawMatrix {
     @SuppressLint("ResourceAsColor")
     void draw(){
         parentLinearLayout.removeAllViews();
+        drawAnswers();
+        parentLinearLayout.addView(getHead());
+        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size()-1)));
+    }
+
+    void drawDetailed(){
+        parentLinearLayout.removeAllViews();
         for (int i = 0; i < matrixhHerarchy.size(); i++){
             parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(i)));
         }
@@ -74,11 +88,11 @@ public class DrawMatrix {
     LinearLayout getHead(){
         LinearLayout matrixTextHead = new LinearLayout(context);
         LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        headParams.setMargins(0,50,0,25);
+        headParams.setMargins(0,20,0,25);
         headParams.gravity = Gravity.CENTER;
         matrixTextHead.setLayoutParams(headParams);
         TextView HeadText = new TextView(context);
-        HeadText.setText("Расширенная треугольная матрица:");
+        HeadText.setText(context.getString(R.string.lower_triangular_matrix));
         HeadText.setTextSize(18);
         HeadText.setTextColor(Color.parseColor("#000000"));
         HeadText.setLayoutParams(headParams);
@@ -86,7 +100,7 @@ public class DrawMatrix {
         return matrixTextHead;
     }
 
-    LinearLayout getIterationLayout(double[][] matrix){
+    LinearLayout getIterationLayout(Fraction[][] matrix){
         LinearLayout matrixItself = new LinearLayout(context) ;
         matrixItself.setOrientation(LinearLayout.VERTICAL);
 
@@ -109,14 +123,14 @@ public class DrawMatrix {
         LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         switch(sizeSystem) {
             case 2:
-                imgParams.height = 130;
+                imgParams.height = 240;
                 imgParams.width = 45;
                 imL.setLayoutParams(imgParams);
                 imR.setLayoutParams(imgParams);
                 break;
 
             case 3:
-                imgParams.height = 175;
+                imgParams.height = 360;
                 imgParams.width = 65;
                 imL.setLayoutParams(imgParams);
                 imR.setLayoutParams(imgParams);
@@ -124,7 +138,7 @@ public class DrawMatrix {
 
 
             case 4:
-                imgParams.height = 250;
+                imgParams.height = 480;
                 imgParams.width = 65;
                 imL.setLayoutParams(imgParams);
                 imR.setLayoutParams(imgParams);
@@ -132,11 +146,19 @@ public class DrawMatrix {
 
 
             case 5:
-                imgParams.height = 300;
+                imgParams.height = 600;
                 imgParams.width = 65;
                 imL.setLayoutParams(imgParams);
                 imR.setLayoutParams(imgParams);
                 break;
+
+            case 6:
+                imgParams.height = 720;
+                imgParams.width = 65;
+                imL.setLayoutParams(imgParams);
+                imR.setLayoutParams(imgParams);
+                break;
+
 
 
         }
@@ -154,8 +176,14 @@ public class DrawMatrix {
                     TextView textView = new TextView(context);
                     textView.setTextSize(15);
                     textView.setTextColor(Color.parseColor("#000000"));
-                    textView.setText(Double.toString(matrix[j][i]));
-                    textView.setWidth(125);
+                    String s;
+                    s = drawFraction(matrix[j][i]);
+                    textView.setWidth(200);
+                    textView.setHeight(120);
+                    textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textView.setMovementMethod(new ScrollingMovementMethod());
+                    textView.setPadding(0, 10, 0, 0);
+                    textView.setText(Html.fromHtml(s));
                     linearLayout.addView(textView);
                 }
                 matrixItself.addView(linearLayout);
@@ -170,7 +198,7 @@ public class DrawMatrix {
     void drawAnswers(){
         matrixTextAnswers.removeAllViews();
         TextView headAnswers = new TextView(context);
-        headAnswers.setText("Решение СЛАУ: ");
+        headAnswers.setText(context.getString(R.string.solution));
         headAnswers.setTextSize(18);
         headAnswers.setTextColor(Color.parseColor("#000000"));
         LinearLayout linearLayoutAnswers = new LinearLayout(context);
@@ -184,18 +212,39 @@ public class DrawMatrix {
         linearLayoutAnswers.setLayoutParams(params);
         headAnswers.setLayoutParams(params);
         for (int j=0; j< this.answers.length; j++){
-            BigDecimal bigDecimal = new BigDecimal(this.answers[j]).setScale(2,RoundingMode.HALF_UP);
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 TextView textView = new TextView(context);
                 textView.setTextSize(17);
+                textView.setHeight(130);
+
+                textView.setPadding(0, 10, 0, 0);
                 textView.setTextColor(Color.parseColor("#541137"));
-                String s = "x" + Integer.toString(j+1)+" = "+ bigDecimal.toString() + ";\n" ;
-                textView.setText(s);
+                String s = "x" + Integer.toString(j+1)+" = "+ drawFractionResult(this.answers[j]) ;
+                textView.setText(Html.fromHtml(s));
                 textView.setGravity(Gravity.CENTER_HORIZONTAL);
                 linearLayout.addView(textView);
                 linearLayoutAnswers.addView(linearLayout);
             }
         matrixTextAnswers.addView(linearLayoutAnswers);
         }
+
+    private String drawFraction(Fraction fraction){
+        String  s = ((fraction.getNumerator() == 0 )||(fraction.getDenominator() == 1))?
+                String.valueOf(fraction.getNumerator()):
+                "<sup>"+fraction.getNumerator()+ "</sup>" + "/<sub>" + fraction.getDenominator() + "</sub>";
+        return s;
+    }
+
+    private String drawFractionResult(Fraction fraction){
+        String s = drawFraction(fraction);
+        double d = (double)fraction.getNumerator()/fraction.getDenominator();
+        s = s + " ≈" + String.valueOf(
+                BigDecimal.valueOf(d)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue()
+        );
+
+        return s;
+    }
 }

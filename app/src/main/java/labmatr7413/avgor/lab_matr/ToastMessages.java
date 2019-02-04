@@ -15,7 +15,7 @@ import android.widget.Toast;
         }
 
         static void dataError(Context context) {
-            toastBottom("Проверьте правильность введенной системы", context);
+            toastBottom(context.getString(R.string.check_data), context);
         }
 
         static void programError(Context context) {

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Solve linear equation system </string>
+    <string name="write_num_variables">Select num of variables in the system.</string>
+    <string name="write_equation">Write system of linear equations</string>
+    <string name="method_Gauss">Gauss-Jordan solution</string>
+    <string name="detailed_method_Gauss">Detailed solution</string>
+    <string name="lower_triangular_matrix">Lower extended triangular matrix</string>
+    <string name="solution">Solution:</string>
+    <string name="select_value">Select value</string>
+    <string name="check_data">Check the correctness of the entered data</string>
+</resources>

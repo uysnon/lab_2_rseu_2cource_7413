@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     DrawSystem drawSystem;
     System system;
     Button buttonGauss;
+    Button buttonDetailedGauss;
 
 
     @Override
@@ -36,19 +37,23 @@ public class MainActivity extends AppCompatActivity {
         spinnerSizeSystem = findViewById(R.id.spinner_size_system);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SizeSystem.SIZES_ARRAY_STRING);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         buttonGauss = findViewById(R.id.button_method_Gauss);
+        buttonDetailedGauss = findViewById(R.id.button_detailed_method_Gauss);
+
         matrixGaussLinearLayout = findViewById(R.id.matrix_Gauss);
 
         matrixTextAnswers = findViewById(R.id.answer_Gauss);
         spinnerSizeSystem.setAdapter(adapter);
         spinnerSizeSystem.setSelection(0);
 
+        SizeSystem.SIZES_ARRAY_STRING[0] = getString(R.string.select_value);
 
             buttonGauss.setOnClickListener(new View.OnClickListener() {
                 @Override
 
                 public void onClick(View v) {
-//                try {
+                try {
                     system = new System(drawSystem.getIdEditTexts().length, drawSystem.getIdEditTexts()[0].length);
                     parseEditTexts(drawSystem);
                     MethodGauss methodGauss = new MethodGauss(system.systemCoefficients);
@@ -59,11 +64,31 @@ public class MainActivity extends AppCompatActivity {
                             matrixTextAnswers,
                             methodGauss);
                     drawMatrixGauss.draw();
-//               }catch (Exception e){
-//                      ToastMessages.dataError(context);
-//                    }
+               }catch (Exception e){
+                      ToastMessages.dataError(context);
+                    }
                 }
 
+            });
+
+            buttonDetailedGauss.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        system = new System(drawSystem.getIdEditTexts().length, drawSystem.getIdEditTexts()[0].length);
+                        parseEditTexts(drawSystem);
+                        MethodGauss methodGauss = new MethodGauss(system.systemCoefficients);
+                        methodGauss.Gauss();
+                        DrawMatrix drawMatrixGauss = new DrawMatrix(
+                                context,
+                                matrixGaussLinearLayout,
+                                matrixTextAnswers,
+                                methodGauss);
+                        drawMatrixGauss.drawDetailed();
+                    }catch (Exception e){
+                        ToastMessages.dataError(context);
+                    }
+                }
             });
 
         spinnerSizeSystem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -84,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0 ; i< system.getSystemCoefficients().length; i++){
             for (int j = 0 ; j< system.getSystemCoefficients()[0].length; j++){
                 EditText editText = (EditText)findViewById(drawSystem.getIdEditTexts()[i][j]);
-                double value = Double.parseDouble(editText.getText().toString());
-                system.setSystemCoefficients(value, i, j);
+                Fraction fraction = new Fraction(Integer.parseInt(editText.getText().toString()), 1);
+                system.setSystemCoefficients(fraction, i, j);
             }
         }
     }

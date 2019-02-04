@@ -3,4 +3,9 @@
     <string name="write_num_variables">Выберете количество переменных, содержащихся в системе.</string>
     <string name="write_equation">Введите систему линейных уравнений</string>
     <string name="method_Gauss">Решение методом Гаусса</string>
+    <string name="detailed_method_Gauss">Подробное решение методом Гаусса</string>
+    <string name="lower_triangular_matrix">Нижняя расширенная треугольная матрица</string>
+    <string name="solution">Решение СЛАУ</string>
+    <string name="select_value">Определите значение</string>
+    <string name="check_data">Проверьте корректность введенных данных.</string>
 </resources>

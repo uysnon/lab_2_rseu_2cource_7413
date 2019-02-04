@@ -54,7 +54,7 @@ public  class DrawSystem {
                 editText.setText(Integer.toString(random.nextInt(20)));
                 editText.setWidth(WIDTH_EDIT_TEXT);
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.setKeyListener(DigitsKeyListener.getInstance("0123456789.-"));
+                editText.setKeyListener(DigitsKeyListener.getInstance("0123456789-"));
                 editText.setGravity(Gravity.CENTER_HORIZONTAL);
                 TextView textViewSign = new TextView(context);
                 if  (i<size) {
@@ -72,6 +72,8 @@ public  class DrawSystem {
         }
 
     }
+
+
 
 
     public int[][] getIdEditTexts() {

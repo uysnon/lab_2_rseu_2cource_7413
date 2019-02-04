@@ -3,8 +3,8 @@ package labmatr7413.avgor.lab_matr;
 public class Matrix {
 
     //поменять значения строки row масссива array на значения из массива line
-    static double[][] setLine(double [][] array, double[] line, int row ){
-        double [][] array0 = setArray(array);
+    static Fraction[][] setLine(Fraction [][] array, Fraction[] line, int row ){
+        Fraction [][] array0 = setArray(array);
         for (int i = 0; i< array[0].length; i++){
             array0[row][i] = line[i];
         }
@@ -12,17 +12,17 @@ public class Matrix {
     }
 
     //Создать одномерный массив ряда исходного двумерного массива с опередленным коэффиециентом
-    static double[] editLineWithCoefficient(double [][] matrix0, int line, double coefficient){
-        double[]array  = new  double[matrix0[0].length];
+    static Fraction[] editLineWithCoefficient(Fraction [][] matrix0, int line, Fraction coefficient){
+        Fraction[]array  = new  Fraction[matrix0[0].length];
         for (int i = 0; i< array.length; i++){
-            array[i] = matrix0[line][i] * coefficient;
+            array[i] = Fraction.multiply(matrix0[line][i],coefficient);
         }
         return  array;
     }
 
     //Поменять  местами 2 ряда в массиве array 0
-    static double[][] swapLines(double[][]array , int row1, int row2){
-        double [][] array0 = setArray(array);
+    static Fraction[][] swapLines(Fraction[][]array , int row1, int row2){
+        Fraction [][] array0 = setArray(array);
         if (row1 != row2) {
             for (int i = 0; i < array[0].length; i++) {
                 array0[row1][i] = array[row2][i];
@@ -47,8 +47,8 @@ public class Matrix {
     };
 
     //Создать двумерный массив на основе другого массива
-    static  double[][] setArray(double[][] source){
-        double[][] array = new double[source.length][source[0].length] ;
+    static  Fraction[][] setArray(Fraction[][] source){
+        Fraction[][] array = new Fraction[source.length][source[0].length] ;
         for (int i = 0 ; i< source.length; i++){
             for (int j = 0 ; j< source[0].length; j++){
                 array[i][j]= source[i][j];

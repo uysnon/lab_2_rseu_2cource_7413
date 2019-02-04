@@ -6,16 +6,16 @@ import android.view.View;
 import android.widget.EditText;
 
 public class System {
-    double systemCoefficients[][];
+    Fraction systemCoefficients[][];
     System(int vertical, int horizontal){
-        systemCoefficients = new double[vertical][horizontal];
+        systemCoefficients = new Fraction[vertical][horizontal];
     }
 
-    public double[][] getSystemCoefficients() {
+    public Fraction[][] getSystemCoefficients() {
         return systemCoefficients;
     }
 
-    public void setSystemCoefficients(double coefficient, int i, int j) {
+    public void setSystemCoefficients(Fraction coefficient, int i, int j) {
         this.systemCoefficients[i][j] = coefficient;
     }
 }

@@ -8,30 +8,30 @@ import static labmatr7413.avgor.lab_matr.Matrix.*;
 
 public class MethodGauss {
 
-    double [][] matrix;
-    double [][] matrix0;
+    Fraction [][] matrix;
+    Fraction [][] matrix0;
     int width;
     int height;
-    double[][] resultMatrix;
+    Fraction[][] resultMatrix;
 
-    public double[] getX() {
+    public Fraction[] getX() {
         return x;
     }
 
-    private double[] x;
+    private Fraction[] x;
 
-    public ArrayList<double[][]> getMatrixhHerarchy() {
+    public ArrayList<Fraction[][]> getMatrixhHerarchy() {
         return matrixhHerarchy;
     }
 
-    private ArrayList<double[][]> matrixhHerarchy;
+    private ArrayList<Fraction[][]> matrixhHerarchy;
 
-    MethodGauss(double [][] sourceMatrix ){
+    MethodGauss(Fraction [][] sourceMatrix ){
         matrix = setArray(sourceMatrix);
         matrix0 = setArray(matrix);
         width = matrix0[0].length;
         height = matrix0.length;
-        this.x = new double[matrix0.length];
+        this.x = new Fraction[matrix0.length];
         matrixhHerarchy  = new ArrayList<>();
     }
     //    Приведение исходной матрицы к треугольному виду
@@ -43,73 +43,85 @@ public class MethodGauss {
         // rty|s->(1) 0ty|s->(2) 0ty|s  , итого 2 итерации (переменные приведены для
         // uio|d      0io|d      00o|d    наглядности).
         int iteration = 0 ;
-        matrixhHerarchy.add(setIteration(matrix));
-        while (!isRectangle(matrix)) {
+        matrixhHerarchy.add(matrix);
+        while (!isRectangle(matrix)&&(iteration<matrix.length)) {
 //            int numSort = 0;
 //            while (numSort < this.matrix.length - 1) {
 //                int rowMin = findMinRow(this.matrix, iteration, iteration);
 //                matrix = swapLines(matrix, rowMin, numSort);
 //                numSort++;
 //            }
-            if (!checkElement(iteration, matrix)){
-                matrix = swapLines(matrix, iteration, matrix.length-1);
+            int help= 0;
+
+            breakMe:
+            {
+                boolean bHelp = false;
+                while ((help < matrix.length) && (!bHelp)) {
+                    if (iteration == matrix.length - 1) {
+                        if (checkElement(iteration, matrix)) break breakMe;
+                    }
+                    if (!checkElement(iteration, matrix)) {
+                        matrix = swapLines(matrix, iteration, iteration + 1);
+                    } else bHelp = true;
+                    help++;
+                }
+                if (help >= matrix.length) {
+                    iteration++;
+                }
+
+
+                for (int i = iteration + 1; i < matrix.length; i++) {
+                    if (matrix[i][iteration].getNumerator() == 0) {
+                        if (i == matrix.length - 1) {
+                            break;
+                        } else matrix = swapLines(matrix, i, matrix.length - 1);
+                    }
+                    Fraction c = findCoefficient(iteration, i, iteration, matrix);
+                    Fraction[] line1 = editLineWithCoefficient(matrix, iteration, c);
+                    Fraction[] lineCurrent = new Fraction[width];
+                    for (int j = 0; j < width; j++) {
+                        lineCurrent[j] = Fraction.add(matrix[i][j],line1[j]);
+                    }
+                    matrix = setLine(matrix, lineCurrent, i);
+                }
             }
 
-            for(int i = iteration+1; i< matrix.length; i++){
-                if(matrix[i][iteration]==0){
-                    if (i==matrix.length-1){
-                        break;
-                    }else matrix= swapLines(matrix, i, matrix.length-1);
-                }
-                double c = findCoefficient(iteration, i, iteration, matrix);
-                double[] line1 = editLineWithCoefficient(matrix, iteration, c);
-                double[] lineCurrent = new double[width];
-                for (int j = 0; j<width; j++){
-                    lineCurrent[j] = matrix[i][j] + line1[j];
-                }
-                matrix = setLine(matrix, lineCurrent, i);
-            }
-            matrixhHerarchy.add(setIteration(matrix));
+            matrixhHerarchy.add(matrix);
             iteration++;
         }
-        resultMatrix = new double[matrix.length][matrix[0].length];
-        for(int m = 0;m < matrix.length; m++){
-            for(int n = 0;n < matrix[0].length; n++){
-                Double d = new Double(matrix[m][n]);
-                resultMatrix[m][n] = BigDecimal.valueOf(d)
-                        .setScale(1, RoundingMode.HALF_UP)
-                        .doubleValue();
-            }
-        }
+        resultMatrix = matrix;
         getAnswers(resultMatrix);
 
     }
 
-    private double[][] setIteration(double[][] basic){
-        double[][] result = new double[basic.length][basic[0].length];
-        for(int m = 0;m < basic.length; m++){
-            for(int n = 0;n < basic[0].length; n++){
-                Double d = new Double(basic[m][n]);
-                result[m][n] = BigDecimal.valueOf(d)
-                        .setScale(1, RoundingMode.HALF_UP)
-                        .doubleValue();
-            }
-        }
-        return result;
-    }
+//    private double[][] setIteration(double[][] basic){
+//        double[][] result = new double[basic.length][basic[0].length];
+//        for(int m = 0;m < basic.length; m++){
+//            for(int n = 0;n < basic[0].length; n++){
+//                Double d = new Double(basic[m][n]);
+//                result[m][n] = BigDecimal.valueOf(d)
+//                        .setScale(1, RoundingMode.HALF_UP)
+//                        .doubleValue();
+//            }
+//        }
+//        return result;
+//    }
 
 
 
-    private void getAnswers(double[][] array){
+    private void getAnswers(Fraction[][] array){
         for(int i= 0; i< array.length; i++){{
             int currentRow = array.length-1-i;
-            double koef;
-
-            koef = array[array.length-1-i][array.length];
+            Fraction koef;
+            koef = new Fraction(array[array.length-1-i][array.length]);
             for (int j= 0; j<i; j++ ){
-                koef =  koef - x[array.length-1-j]*array[currentRow][array.length-1-j];
+                koef =  Fraction.subtraction(koef,
+                        Fraction.multiply(x[array.length-1-j],array[currentRow][array.length-1-j])
+                );
             }
-            this.x[currentRow] = koef/array[currentRow][array.length-1-i];
+            this.x[currentRow] = Fraction.division(
+                    koef,
+                    array[currentRow][array.length-1-i]);
 
         }
         }
@@ -120,23 +132,25 @@ public class MethodGauss {
     //n-ой строки.
     //array - массив, в котором происходят вычисления
 
-    private double findCoefficient(int k, int n, int iteration, double[][]array){
-        return -array[n][iteration]/array[k][iteration];
+    private Fraction findCoefficient(int k, int n, int iteration, Fraction[][]array){
+        return Fraction.multiply(
+                new Fraction(-1,1),
+                Fraction.division(array[n][iteration],array[k][iteration]));
     };
 
 
-    boolean checkElement(int k, double[][] array){
-        if (array[k][k]==0){
+    boolean checkElement(int k, Fraction[][] array){
+        if (array[k][k].getNumerator()==0){
             return false;
         }else return true;
     }
 
-    private boolean isRectangle(double[][] array){
+    private boolean isRectangle(Fraction[][] array){
         boolean b = true;
         stopProcess:
         for(int i = 0; i<array.length; i++) {
             for (int j = 0; j < i; j++){
-                if (array[i][j]!=0){
+                if (array[i][j].getNumerator()!=0){
                     b = false;
                     break stopProcess;
                 }
