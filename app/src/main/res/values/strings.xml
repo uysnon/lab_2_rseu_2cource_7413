@@ -1,11 +1,15 @@
 <resources>
-    <string name="app_name">Решение СЛАУ</string>
+    <string name="app_name">Метод Гаусса</string>
     <string name="write_num_variables">Выберете количество переменных, содержащихся в системе.</string>
     <string name="write_equation">Введите систему линейных уравнений</string>
-    <string name="method_Gauss">Решение методом Гаусса</string>
-    <string name="detailed_method_Gauss">Подробное решение методом Гаусса</string>
+    <string name="method_Gauss">Решение методом Гаусса  \n[- 3 монеты]</string>
+    <string name="detailed_method_Gauss">Подробное решение методом Гаусса \n[- 5 монет]</string>
     <string name="lower_triangular_matrix">Нижняя расширенная треугольная матрица</string>
     <string name="solution">Решение СЛАУ</string>
     <string name="select_value">Определите значение</string>
     <string name="check_data">Проверьте корректность введенных данных.</string>
+    <string name="need_5_coins">Требуется 5 монет для выбранного действия</string>
+    <string name="need_3_coins">Требуется 3 монеты для выбранного действия</string>
+    <string name="add_new_coins_for_add">+ 15 монет [просмотр рекламы]</string>
+    <string name="message_video_ad_not_loaded">Неудачная попытка загрузки видео-рекламы. Проверьте интернет подключение!</string>
 </resources>

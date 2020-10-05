@@ -1,34 +1,16 @@
 package labmatr7413.avgor.lab_matr;
-import static java.security.AccessController.getContext;
-import static labmatr7413.avgor.lab_matr.Matrix.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Typeface;
 import android.text.Html;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.method.DigitsKeyListener;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,7 +20,7 @@ import java.util.ArrayList;
 public class DrawMatrix {
     static private final int WIDTH_TEXT_VIEW = 65;
     Context context;
-    ArrayList <Fraction[][]>  matrixhHerarchy;
+    ArrayList<Fraction[][]> matrixhHerarchy;
     LinearLayout parentLinearLayout;
     LinearLayout matrixTextAnswers;
     Fraction[] answers;
@@ -48,9 +30,8 @@ public class DrawMatrix {
     DrawMatrix(
             Context context,
             LinearLayout parentLinearLayout,
-            LinearLayout  matrixTextAnswers,
-            MethodGauss methodGauss)
-    {
+            LinearLayout matrixTextAnswers,
+            MethodGauss methodGauss) {
         this.parentLinearLayout = parentLinearLayout;
         this.parentLinearLayout.setOrientation(LinearLayout.VERTICAL);
         parentLinearLayout.setGravity(Gravity.CENTER);
@@ -61,52 +42,53 @@ public class DrawMatrix {
         answers = methodGauss.getX();
     }
 
-    void clear(){
+    void clear() {
         parentLinearLayout.removeAllViews();
     }
 
 
     @SuppressLint("ResourceAsColor")
-    void draw(){
+    void draw() {
         parentLinearLayout.removeAllViews();
         drawAnswers();
         parentLinearLayout.addView(getHead());
-        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size()-1)));
+        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size() - 1)));
     }
 
-    void drawDetailed(){
+    void drawDetailed() {
         parentLinearLayout.removeAllViews();
-        for (int i = 0; i < matrixhHerarchy.size(); i++){
+        for (int i = 0; i < matrixhHerarchy.size(); i++) {
             parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(i)));
         }
         drawAnswers();
         parentLinearLayout.addView(getHead());
-        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size()-1)));
+        parentLinearLayout.addView(getIterationLayout(matrixhHerarchy.get(matrixhHerarchy.size() - 1)));
     }
 
 
-    LinearLayout getHead(){
+    LinearLayout getHead() {
         LinearLayout matrixTextHead = new LinearLayout(context);
         LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        headParams.setMargins(0,20,0,25);
+        headParams.setMargins(16, 20, 16, 25);
         headParams.gravity = Gravity.CENTER;
         matrixTextHead.setLayoutParams(headParams);
-        TextView HeadText = new TextView(context);
-        HeadText.setText(context.getString(R.string.lower_triangular_matrix));
-        HeadText.setTextSize(18);
-        HeadText.setTextColor(Color.parseColor("#000000"));
-        HeadText.setLayoutParams(headParams);
-        matrixTextHead.addView(HeadText);
+        TextView headText = new TextView(context);
+        headText.setText(context.getString(R.string.lower_triangular_matrix));
+        headText.setTextSize(16);
+        headText.setTypeface(headText.getTypeface(), Typeface.BOLD);
+        headText.setTextColor(Color.parseColor("#000000"));
+        headText.setLayoutParams(headParams);
+        matrixTextHead.addView(headText);
         return matrixTextHead;
     }
 
-    LinearLayout getIterationLayout(Fraction[][] matrix){
-        LinearLayout matrixItself = new LinearLayout(context) ;
+    LinearLayout getIterationLayout(Fraction[][] matrix) {
+        LinearLayout matrixItself = new LinearLayout(context);
         matrixItself.setOrientation(LinearLayout.VERTICAL);
 
         ViewGroup.LayoutParams helpParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ((LinearLayout.LayoutParams) helpParams).topMargin = 50;
-        ((LinearLayout.LayoutParams) helpParams).gravity  = Gravity.CENTER;
+        ((LinearLayout.LayoutParams) helpParams).gravity = Gravity.CENTER;
 
         LinearLayout iterationLayout = new LinearLayout(context);
         iterationLayout.setLayoutParams(helpParams);
@@ -121,7 +103,7 @@ public class DrawMatrix {
         ImageView imR = new ImageView(context);
         imR.setImageResource(R.drawable.ic_right_bracket);
         LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        switch(sizeSystem) {
+        switch (sizeSystem) {
             case 2:
                 imgParams.height = 240;
                 imgParams.width = 45;
@@ -160,89 +142,88 @@ public class DrawMatrix {
                 break;
 
 
-
         }
         left.addView(imL);
         right.addView(imR);
-            iterationLayout.addView(left);
-            for (int j = 0; j < sizeSystem; j++) {
-                LinearLayout linearLayout = new LinearLayout(context);
-                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                for (int i = 0; i < sizeSystem + 1; i++) {
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.gravity = Gravity.CENTER;
-                    linearLayout.setLayoutParams(params);
-                    TextView textView = new TextView(context);
-                    textView.setTextSize(15);
-                    textView.setTextColor(Color.parseColor("#000000"));
-                    String s;
-                    s = drawFraction(matrix[j][i]);
-                    textView.setWidth(200);
-                    textView.setHeight(120);
-                    textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-                    textView.setMovementMethod(new ScrollingMovementMethod());
-                    textView.setPadding(0, 10, 0, 0);
-                    textView.setText(Html.fromHtml(s));
-                    linearLayout.addView(textView);
-                }
-                matrixItself.addView(linearLayout);
+        iterationLayout.addView(left);
+        for (int j = 0; j < sizeSystem; j++) {
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            for (int i = 0; i < sizeSystem + 1; i++) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.CENTER;
+                linearLayout.setLayoutParams(params);
+                TextView textView = new TextView(context);
+                textView.setTextSize(15);
+                textView.setTextColor(Color.parseColor("#000000"));
+                String s;
+                s = drawFraction(matrix[j][i]);
+                textView.setWidth(200);
+                textView.setHeight(120);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                textView.setMovementMethod(new ScrollingMovementMethod());
+                textView.setPadding(0, 10, 0, 0);
+                textView.setText(Html.fromHtml(s));
+                linearLayout.addView(textView);
             }
-            iterationLayout.addView(matrixItself);
-            iterationLayout.addView(right);
-            return  iterationLayout;
+            matrixItself.addView(linearLayout);
+        }
+        iterationLayout.addView(matrixItself);
+        iterationLayout.addView(right);
+        return iterationLayout;
     }
 
 
-
-    void drawAnswers(){
+    void drawAnswers() {
         matrixTextAnswers.removeAllViews();
         TextView headAnswers = new TextView(context);
         headAnswers.setText(context.getString(R.string.solution));
-        headAnswers.setTextSize(18);
+        headAnswers.setTextSize(16);
+        headAnswers.setTypeface(headAnswers.getTypeface(), Typeface.BOLD);
         headAnswers.setTextColor(Color.parseColor("#000000"));
         LinearLayout linearLayoutAnswers = new LinearLayout(context);
         linearLayoutAnswers.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
-        params.setMargins(0,30,0,0);
+        params.setMargins(0, 30, 0, 0);
         linearLayoutAnswers.setOrientation(LinearLayout.VERTICAL);
         matrixTextAnswers.addView(headAnswers);
         linearLayoutAnswers.setLayoutParams(params);
         headAnswers.setLayoutParams(params);
-        for (int j=0; j< this.answers.length; j++){
+        for (int j = 0; j < this.answers.length; j++) {
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                TextView textView = new TextView(context);
-                textView.setTextSize(17);
-                textView.setHeight(130);
+            TextView textView = new TextView(context);
+            textView.setTextSize(17);
+            textView.setHeight(130);
 
-                textView.setPadding(0, 10, 0, 0);
-                textView.setTextColor(Color.parseColor("#541137"));
-                String s = "x" + Integer.toString(j+1)+" = "+ drawFractionResult(this.answers[j]) ;
-                textView.setText(Html.fromHtml(s));
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                linearLayout.addView(textView);
-                linearLayoutAnswers.addView(linearLayout);
-            }
-        matrixTextAnswers.addView(linearLayoutAnswers);
+            textView.setPadding(0, 10, 0, 0);
+            textView.setTextColor(Color.parseColor("#541137"));
+            String s = "x" + "<sub>" + Integer.toString(j + 1) + "</sub>" + " = " + drawFractionResult(this.answers[j]);
+            textView.setText(Html.fromHtml(s));
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            linearLayout.addView(textView);
+            linearLayoutAnswers.addView(linearLayout);
         }
+        matrixTextAnswers.addView(linearLayoutAnswers);
+    }
 
-    private String drawFraction(Fraction fraction){
-        String  s = ((fraction.getNumerator() == 0 )||(fraction.getDenominator() == 1))?
-                String.valueOf(fraction.getNumerator()):
-                "<sup>"+fraction.getNumerator()+ "</sup>" + "/<sub>" + fraction.getDenominator() + "</sub>";
+    private String drawFraction(Fraction fraction) {
+        String s = ((fraction.getNumerator() == 0) || (fraction.getDenominator() == 1)) ?
+                String.valueOf(fraction.getNumerator()) :
+                "<sup>" + fraction.getNumerator() + "</sup>" + "/<sub>" + fraction.getDenominator() + "</sub>";
         return s;
     }
 
-    private String drawFractionResult(Fraction fraction){
+    private String drawFractionResult(Fraction fraction) {
         String s = drawFraction(fraction);
-        double d = (double)fraction.getNumerator()/fraction.getDenominator();
+        double d = (double) fraction.getNumerator() / fraction.getDenominator();
         s = s + " ≈" + String.valueOf(
                 BigDecimal.valueOf(d)
-                .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue()
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue()
         );
 
         return s;

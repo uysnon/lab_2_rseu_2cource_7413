@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="xiaomi_mi_5" translatable="false">94A0C399AE4535B79E9A7EAB785543F8</string>
+    <string name="xiaomi_mi_8" translatable="false">FDA2C35CC343F8E800501C520E81E13E</string>
+    <string name="admob_app_identifier" translatable="false">ca-app-pub-6075872238089934~6651698715</string>
+    <string name="admob_full_description_rewarded_video" translatable="false">ca-app-pub-6075872238089934/9559620008</string>
+
+
+</resources>

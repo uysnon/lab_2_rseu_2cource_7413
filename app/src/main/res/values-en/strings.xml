@@ -2,10 +2,15 @@
     <string name="app_name">Solve linear equation system </string>
     <string name="write_num_variables">Select num of variables in the system.</string>
     <string name="write_equation">Write system of linear equations</string>
-    <string name="method_Gauss">Gauss-Jordan solution</string>
-    <string name="detailed_method_Gauss">Detailed solution</string>
+    <string name="method_Gauss">Gauss-Jordan solution [- 3 coins]</string>
+    <string name="detailed_method_Gauss">Detailed solution [- 5 coins]</string>
     <string name="lower_triangular_matrix">Lower extended triangular matrix</string>
     <string name="solution">Solution:</string>
     <string name="select_value">Select value</string>
     <string name="check_data">Check the correctness of the entered data</string>
+    <string name="need_5_coins">5 coins are required for this action!</string>
+    <string name="need_3_coins">3 coins are required for this action!</string>
+    <string name="add_new_coins_for_add">+ 15 coins [show ad]</string>
+    <string name="message_video_ad_not_loaded">Check internet connection!</string>
+
 </resources>

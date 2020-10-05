@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sp_app" translatable="false">app shared preferences</string>
+    <string name="sp_num_coins" translatable="false">num coinsss</string>
+    <string name="sp_is_first_launch" translatable="false">first launch</string>
+</resources>
